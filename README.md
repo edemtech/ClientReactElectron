@@ -1,19 +1,23 @@
-#MAIN
+# MAIN INFO
 
-to build: 
+To build: 
+
 1)npm install
+
 2)copy from /assets/: a)geckodriver in root dir..
-		      b)launches into /app/resourses/..
+
+		      		  b)launches into /app/resourses/..
+
 3)npm run pack:win (for windows)
 
 ____________________________________________________________
 
 
+Other inf:
 
 
 
-
-# electron-react-redux-boilerplate
+electron-react-redux-boilerplate 
 
 A minimal boilerplate to get started with [Electron](http://electron.atom.io/), [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/).
 
