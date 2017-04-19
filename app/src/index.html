@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--<link rel='stylesheet' href='https://bootswatch.com/cyborg/bootstrap.css'>-->
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+
+
+    <title>Big proj</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="./app.js" data-container="#app"></script>
+    <script>
+      if (process.env.BROWSER_SYNC_CLIENT_URL) {
+        const current = document.currentScript;
+        const script = document.createElement('script');
+        script.src = process.env.BROWSER_SYNC_CLIENT_URL;
+        script.async = true;
+        current.parentNode.insertBefore(script, current);
+      }
+    </script>
+  </body>
+</html>

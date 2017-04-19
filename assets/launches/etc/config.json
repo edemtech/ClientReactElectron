@@ -1,0 +1,13 @@
+{
+    "apps":{
+        "jasmin": "C:/Program Files (x86)/forWork/JasminCam/jcam.exe",
+        "f4f": "C:/Program Files (x86)/forWork/VS Media, Inc/Performer Application v4/PerformerApp.exe",
+        "mfc": "C:/Program Files (x86)/forWork/MyFreeCams/MFCChat.exe"
+    },
+    "sites":{
+        "camcon":"",
+        "streamate":"C:/Program Files (x86)/forWork/SMBroadcast/SMBroadcast.exe",
+        "streamray":"C:/Program Files (x86)/forWork/FMLE/FlashMediaLiveEncoder.exe",
+        "imlive":""
+    }
+}
