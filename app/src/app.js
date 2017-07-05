@@ -12,7 +12,7 @@ import setAuthorizationToken from './utils/setAuthorizationToken';
 import jwtDecode from 'jwt-decode';
 import { setCurrentUser } from './actions/authActions';
 import routes from './routes';
- 
+
 /*
 const store = createStore(
 	rootReducer,
@@ -22,9 +22,6 @@ const store = createStore(
 	)
 );
 */
-
-
-
 
 const initialState = {};
 const store = configureStore(initialState);
@@ -36,9 +33,7 @@ if (localStorage.jwtToken) {
 	setAuthorizationToken(localStorage.jwtToken);
 	store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
 }
-
 //store.subscribe(() => {console.log( store.getState()) });
-
 ReactDOM.render(
   <Provider store={store}>
     <Router history={routerHistory} routes={routes} />

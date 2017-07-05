@@ -8,6 +8,7 @@ import auth from './reducers/auth';
 import flashMessages from './reducers/flashMessages';
 import authActions from './actions/authActions';
 import flashMessagesActions from './actions/flashMessages';
+// import adminActions from './actions/adminActions';
 
 const router = routerMiddleware(hashHistory);
 

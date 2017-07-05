@@ -83,10 +83,6 @@ class WorkEnvPage extends React.Component{
 						</div>
 					</div>
 				</div>
-
-
-
-
 			);
 	}
 }
