@@ -8,35 +8,41 @@ class AdminPage extends React.Component{
 		this.state = {
       tableData: []
     }
-		this.getRecords = this.getRecords.bind(this);
+		// this.getRecords = this.getRecords.bind(this);
   }
-
 	getRecords() {
 		getData().then(
 			(res) => { this.setState({tableData: res.data.data}) },
 			(err) => console.log('bad request'),
 		);
 	}
+	modifyRecord(e) {
+		console.log(e.currentTarget);
+	}
 
 	render(){
+		this.getRecords();
 		return(
 			<div>
-				<button className="btn btn-success" onClick={this.getRecords}>Click some</button>
-				<table className="table table-striped table-hover">
+				<table className="table table-sm table-bordered table-hover">
 					<thead>
 						<tr>
-							<th>Username</th>
+							<th>#</th>
+							<th>Логин</th>
 							<th>email</th>
-							<th>permission</th>
+							<th>Права</th>
+							<th>Опции</th>
 						</tr>
 					</thead>
 					<tbody>
 						{
 							this.state.tableData.map( item =>
-								<tr>
+								<tr key={item.id}>
+									<td>{item.id}</td>
 									<td>{item.username}</td>
 									<td>{item.email}</td>
 									<td>{item.permission}</td>
+									<td><button data-id={item.username} className="btn btn-danger" onClick={this.modifyRecord}>Modify</button></td>
 								</tr>
 							)
 						}
@@ -48,9 +54,9 @@ class AdminPage extends React.Component{
 }
 
 // export default AdminPage;
-function someProps(state) {
+function stateProps(state) {
   return {
     auth: state.auth
   };
 }
-export default connect(someProps)(AdminPage);
+export default connect(stateProps)(AdminPage);
