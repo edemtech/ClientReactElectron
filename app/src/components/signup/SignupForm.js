@@ -6,7 +6,6 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import TextFieldGroupB from '../common/TextFieldGroupB';
 
 
-//функция валидации
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 function validateInput(data) {
@@ -120,14 +119,14 @@ class SignupForm extends React.Component{
 
 		return(
 			<form onSubmit={this.onSubmit} className="form-group">
-				
+
 
 					<div className="col-md-4">
 						<TextFieldGroup error={errors.username} label="Имя пользователя" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.username} field="username"/>
 				    	<TextFieldGroup error={errors.email} label="Email" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email} field="email"/>
 				    	<TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="password"/>
 				    	<TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="password"/>
-			      		
+
 			      		<div className={classnames("form-group", { 'has-error': errors.permission })}>
 							<label className="control-label">Права пользователя</label>
 							<select
@@ -203,7 +202,7 @@ class SignupForm extends React.Component{
 							</div>
 						</div>
 					</div>
-					
+
 			</form>
 		);
 	};

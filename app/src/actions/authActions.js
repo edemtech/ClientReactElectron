@@ -30,6 +30,5 @@ export function login(data) {
       setAuthorizationToken(token);
       dispatch(setCurrentUser(jwtDecode(token)));//предоставляем токен, который является объектом пользователя
     });
-
   }
 }
