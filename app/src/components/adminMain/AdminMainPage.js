@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getUsers, loadTable } from '../../actions/adminActions';
+import { getUser, loadTable } from '../../actions/adminActions';
 
 
 class AdminMainPage extends React.Component{
@@ -20,11 +20,8 @@ class AdminMainPage extends React.Component{
 	}
 	modifyRecord(e) {
 		let target = e.currentTarget.getAttribute('data-id');
-		console.log(target);
-		getUser(target).then(
-			(res) => { console.log('success'); },
-			(err) => { console.log('failure') },
-		);
+		console.log('target', target);
+		this.props.getUser(target);
 	}
 
 	render(){
@@ -68,6 +65,7 @@ function mapStateToProps(state) {
   return {
     auth: state.auth,
 		table: state.table,
+		edit: state.edit,
   };
 }
 
@@ -75,4 +73,4 @@ AdminMainPage.contextTypes = {
 	router: React.PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { loadTable })(AdminMainPage);
+export default connect(mapStateToProps, { loadTable, getUser })(AdminMainPage);
