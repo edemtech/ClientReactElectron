@@ -140,10 +140,10 @@ class EditUserForm extends React.Component{
 							{errors.permission && <span className="help-block">{errors.permission}</span>}
 						</div>
 						<div className="form-group btn-group">
-							<button disabled={this.state.isLoading} className="btn btn-success btn-lg">
+							<button disabled={this.state.isLoading} className="btn btn-success">
 								Изменить запись <span className="glyphicon glyphicon-ok"></span>
 							</button>
-							<button disabled={this.state.isLoading} className="btn btn-danger btn-lg">
+							<button disabled={this.state.isLoading} className="btn btn-danger">
 								Удалить <span className="glyphicon glyphicon-remove"></span>
 							</button>
 						</div>

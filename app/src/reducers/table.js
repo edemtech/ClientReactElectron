@@ -1,7 +1,7 @@
 import { LOAD_TABLE } from '../actions/types';
 
 const initialState = {
-  tag: 'hi, i am working reducer!',
+  tag: 'working table reducer!',
   tableData: []
 };
 

@@ -8,16 +8,25 @@ class AdminMainPage extends React.Component{
 	constructor(props) {
     super(props);
 		this.state = {
-      tableData: this.props.table.tableData.data
+      tableData: this.props.table.tableData.data,
+			firstLoad: true
     }
 		this.modifyRecord = this.modifyRecord.bind(this);
 		this.deleteRecord = this.deleteRecord.bind(this);
-		this.getRecords = this.getRecords.bind(this);
+		this.refreshRecords = this.refreshRecords.bind(this);
   }
-	getRecords() {
+	refreshRecords() {
 		this.props.loadTable().then( res => {
 			this.setState({ tableData: this.props.table.tableData.data})
 		});
+	}
+	getRecords() {
+		if( this.state.firstLoad ) {
+			console.log('first load..');
+			this.props.loadTable().then( res => {
+				this.setState({ tableData: this.props.table.tableData.data, firstLoad: false})
+			});
+		};
 	}
 	modifyRecord(e) {
 		let target = e.currentTarget.getAttribute('data-id');
@@ -29,13 +38,19 @@ class AdminMainPage extends React.Component{
 		let target = e.currentTarget.getAttribute('data-id');
 		this.props.removeUser(target).then(res => {
 			console.log(target, ' deleted');
-			this.getRecords();
+			this.refreshRecords();
 		})
 	}
+
 	render(){
+		this.getRecords();
 		return(
 			<div>
-				<button className="btn btn-warning" onClick={this.getRecords}><span className="glyphicon glyphicon-refresh"></span></button>
+				<div className="btn-group">
+					<button className="btn btn-info" onClick={this.refreshRecords}><span className="glyphicon glyphicon-refresh"></span></button>
+					<Link to="/signup" className="btn btn-primary"><span className="glyphicon glyphicon-plus"></span></Link>
+				</div>
+
 				<table className="table table-sm table-hover">
 					<thead>
 						<tr>
@@ -56,7 +71,7 @@ class AdminMainPage extends React.Component{
 									<td>{item.permission}</td>
 									<td><div className="btn-group">
 												<button data-id={item.username}
-																className="btn btn-warning"
+																className="btn btn-info"
 																onClick={this.modifyRecord}>
 																<span className="glyphicon glyphicon-pencil"></span>
 																</button>

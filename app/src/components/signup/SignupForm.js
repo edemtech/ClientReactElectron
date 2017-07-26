@@ -74,7 +74,6 @@ class SignupForm extends React.Component{
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 	}
-
 	//при изменении
 	onChange(e){
 		this.setState({ [e.target.name]: e.target.value });
@@ -101,12 +100,13 @@ class SignupForm extends React.Component{
 				() => {
 					this.props.addFlashMessage({
 						type: 'success',
-						text: 'Регистрация прошла успешно'
+						text: 'Пользователь успешно зарегистрирован'
 					})
-					this.context.router.push('/'); 			 //при успешной валидации происходит редирект на главную
+					this.context.router.push('/admin'); 			 //при успешной валидации происходит редирект на главную
 				},
 				({ response }) => this.setState({ errors: response.data, isLoading: false })
 			);
+
 		}
 	}
 
@@ -119,7 +119,6 @@ class SignupForm extends React.Component{
 
 		return(
 			<form onSubmit={this.onSubmit} className="form-group">
-
 
 					<div className="col-md-4">
 						<TextFieldGroup error={errors.username} label="Имя пользователя" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.username} field="username"/>
@@ -140,7 +139,7 @@ class SignupForm extends React.Component{
 							{errors.permission && <span className="help-block">{errors.permission}</span>}
 						</div>
 						<div className="form-group">
-							<button disabled={this.state.isLoading} className="btn btn-warning btn-lg">
+							<button disabled={this.state.isLoading} className="btn btn-warning">
 								Создать запись
 							</button>
 						</div>

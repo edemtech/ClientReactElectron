@@ -33,7 +33,7 @@ export function getUser(userId) {
   }
 }
 /////////////////////////////////////////
-export function deleteRecord() {
+export function deleteUser() {
   return {
     type: DELETE_USER
   };
@@ -42,7 +42,8 @@ export function removeUser(userId) {
   return dispatch => {
     return axios.delete(ip+'/api/users/'+userId).then(res => {
       const data = res.data;
-      dispatch(deleteRecord());
+      dispatch(deleteUser());
     });
   }
 }
+///////////////////////////////////////////
