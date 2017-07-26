@@ -1,4 +1,4 @@
-import { EDIT_USER } from '../actions/types';
+import { CHOOSE_USER } from '../actions/types';
 
 const initialState = {
 	status: 'none',
@@ -7,7 +7,7 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
 	switch(action.type) {
-		case EDIT_USER:
+		case CHOOSE_USER:
 			return{
 				status: 'edited',
 				editingUser: action.user

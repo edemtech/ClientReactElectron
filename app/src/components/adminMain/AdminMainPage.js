@@ -1,33 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getUser, loadTable } from '../../actions/adminActions';
+import { loadTable, getUser, removeUser } from '../../actions/adminActions';
 
 
 class AdminMainPage extends React.Component{
 	constructor(props) {
     super(props);
 		this.state = {
-      tableData: []
+      tableData: this.props.table.tableData.data
     }
 		this.modifyRecord = this.modifyRecord.bind(this);
+		this.deleteRecord = this.deleteRecord.bind(this);
 		this.getRecords = this.getRecords.bind(this);
   }
 	getRecords() {
-		console.log('summon table');
-		this.props.loadTable();
-		this.setState({ tableData: this.props.table.tableData.data})
+		this.props.loadTable().then( res => {
+			this.setState({ tableData: this.props.table.tableData.data})
+		});
 	}
 	modifyRecord(e) {
 		let target = e.currentTarget.getAttribute('data-id');
-		console.log('target', target);
-		this.props.getUser(target);
+		this.props.getUser(target).then(res => {
+			this.context.router.push('update');
+		});
 	}
-
+	deleteRecord(e) {
+		let target = e.currentTarget.getAttribute('data-id');
+		this.props.removeUser(target).then(res => {
+			console.log(target, ' deleted');
+			this.getRecords();
+		})
+	}
 	render(){
 		return(
 			<div>
-				<button className="btn btn-danger" onClick={this.getRecords}>LOAD</button>
+				<button className="btn btn-warning" onClick={this.getRecords}><span className="glyphicon glyphicon-refresh"></span></button>
 				<table className="table table-sm table-hover">
 					<thead>
 						<tr>
@@ -46,11 +54,19 @@ class AdminMainPage extends React.Component{
 									<td>{item.username}</td>
 									<td>{item.email}</td>
 									<td>{item.permission}</td>
-									<td><button data-id={item.username}
-															className="btn btn-success"
-															onClick={this.modifyRecord}>
-															<span className="glyphicon glyphicon-pencil"></span>
-															</button></td>
+									<td><div className="btn-group">
+												<button data-id={item.username}
+																className="btn btn-warning"
+																onClick={this.modifyRecord}>
+																<span className="glyphicon glyphicon-pencil"></span>
+																</button>
+												<button data-id={item.username}
+																className="btn btn-danger"
+																onClick={this.deleteRecord}>
+																<span className="glyphicon glyphicon-remove"></span>
+																</button>
+											</div>
+									</td>
 								</tr>
 							)
 						}
@@ -73,4 +89,4 @@ AdminMainPage.contextTypes = {
 	router: React.PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { loadTable, getUser })(AdminMainPage);
+export default connect(mapStateToProps, { loadTable, getUser, removeUser })(AdminMainPage);

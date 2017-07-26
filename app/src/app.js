@@ -21,7 +21,8 @@ if (localStorage.jwtToken) {
 	setAuthorizationToken(localStorage.jwtToken);
 	store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
 }
-store.subscribe(() => {console.log( 'store update.. ', store.getState()) });
+//store subscribe
+// store.subscribe(() => {console.log( 'store update.. ', store.getState()) });
 
 ReactDOM.render(
   <Provider store={store}>
