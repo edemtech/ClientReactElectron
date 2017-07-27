@@ -72,7 +72,8 @@ class EditUserForm extends React.Component{
 		}
 
 		this.onChange = this.onChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
+		this.onSave = this.onSave.bind(this);
+		this.onDelete = this.onDelete.bind(this);
 	}
 
 	//при изменении
@@ -83,29 +84,57 @@ class EditUserForm extends React.Component{
 	//проверка на правильность и ссылка на функцию валидации
 	isValid() {
 		const { errors, isValid } = validateInput(this.state);
-
 		if (!isValid){
 			this.setState({ errors });
 		}
-
 		return isValid;
 	}
 
-	//при нажатии кнопки submit
-	onSubmit(e) {
+	onSave(e) {
 		e.preventDefault();
-
-		if (this.isValid()){   							     //проверка локальной валидации
-			this.setState({ errors: {}, isLoading: true });  //
-			this.props.userSignupRequest(this.state).then(   //проверка валидации на сервере, если данные не заполнены или не верны, возвращаются сообщения
+		if (this.isValid()){
+			let data = {
+				username: this.state.username,
+				email: this.state.email,
+				permission: this.state.permission,
+				camcon: this.state.camcon,
+				camconPass: this.state.camconPass,
+				streamate: this.state.streamate,
+				streamatePass: this.state.streamatePass,
+				streamray: this.state.streamray,
+				streamrayPass: this.state.streamrayPass,
+				imlive: this.state.imlive,
+				imlivePass: this.state.imlivePass,
+				mfc: this.state.mfc,
+				mfcPass: this.state.mfcPass,
+				f4f: this.state.f4f,
+				f4fPass: this.state.f4fPass,
+				jasmin: this.state.jasmin,
+				jasminPass: this.state.jasminPass
+			};
+			this.props.saveUser(this.props.edit.editingUser.username, data).then(
 				() => {
 					this.props.addFlashMessage({
 						type: 'success',
-						text: 'Регистрация прошла успешно'
+						text: 'Пользователь изменен'
 					})
-					this.context.router.push('/'); 			 //при успешной валидации происходит редирект на главную
-				},
-				({ response }) => this.setState({ errors: response.data, isLoading: false })
+					this.context.router.push('/admin');
+				}
+			);
+		}
+	}
+
+	onDelete(e) {
+		e.preventDefault();
+		if (this.isValid()){
+			this.props.removeUser(this.state.username).then(
+				() => {
+					this.props.addFlashMessage({
+						type: 'success',
+						text: 'Пользователь удален'
+					})
+					this.context.router.push('/admin');
+				}
 			);
 		}
 	}
@@ -140,10 +169,10 @@ class EditUserForm extends React.Component{
 							{errors.permission && <span className="help-block">{errors.permission}</span>}
 						</div>
 						<div className="form-group btn-group">
-							<button disabled={this.state.isLoading} className="btn btn-success">
+							<button onClick={this.onSave} disabled={this.state.isLoading} className="btn btn-success">
 								Изменить запись <span className="glyphicon glyphicon-ok"></span>
 							</button>
-							<button disabled={this.state.isLoading} className="btn btn-danger">
+							<button onClick={this.onDelete} disabled={this.state.isLoading} className="btn btn-danger">
 								Удалить <span className="glyphicon glyphicon-remove"></span>
 							</button>
 						</div>
@@ -213,6 +242,8 @@ class EditUserForm extends React.Component{
 
 EditUserForm.propTypes = {
 	// userSignupRequest: React.PropTypes.func.isRequired,
+	saveUser: React.PropTypes.func.isRequired,
+	removeUser: React.PropTypes.func.isRequired,
 	addFlashMessage: React.PropTypes.func.isRequired
 }
 

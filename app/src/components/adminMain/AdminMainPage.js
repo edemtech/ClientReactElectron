@@ -47,8 +47,8 @@ class AdminMainPage extends React.Component{
 		return(
 			<div>
 				<div className="btn-group">
-					<button className="btn btn-info" onClick={this.refreshRecords}><span className="glyphicon glyphicon-refresh"></span></button>
-					<Link to="/signup" className="btn btn-primary"><span className="glyphicon glyphicon-plus"></span></Link>
+					<button className="btn btn-info" onClick={this.refreshRecords}>Обновить <span className="glyphicon glyphicon-refresh"></span></button>
+					<Link to="/signup" className="btn btn-primary">Добавить пользователя <span className="glyphicon glyphicon-plus"></span></Link>
 				</div>
 
 				<table className="table table-sm table-hover">

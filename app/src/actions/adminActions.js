@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiPrefix, serverPort } from '../../etc/config.json';
-import { LOAD_TABLE, CHOOSE_USER, DELETE_USER } from './types';
+import { LOAD_TABLE, CHOOSE_USER, DELETE_USER, UPDATE_USER } from './types';
 const ip = apiPrefix + serverPort;
 
 export function setUsersTable(table) {
@@ -17,7 +17,7 @@ export function loadTable() {
     });
   }
 }
-///////////////////////////////////////
+
 export function setEditingUser(user) {
   return {
     type: CHOOSE_USER,
@@ -32,7 +32,7 @@ export function getUser(userId) {
     });
   }
 }
-/////////////////////////////////////////
+
 export function deleteUser() {
   return {
     type: DELETE_USER
@@ -46,4 +46,19 @@ export function removeUser(userId) {
     });
   }
 }
-///////////////////////////////////////////
+
+export function updateUser() {
+  return {
+    type: UPDATE_USER
+  };
+}
+export function saveUser(userId, data) {
+  return dispatch => {
+    return axios.put(ip+'/api/users/'+userId, {
+      ...data
+    }).then(res => {
+      const data = res.data;
+      dispatch(updateUser());
+    });
+  }
+}

@@ -34,6 +34,11 @@ class NavigationBar extends React.Component {
     );
     const adminLinks = (
       <ul className="nav navbar-nav navbar-right">
+        <li><Link to="/admin">Админка</Link></li>
+      </ul>
+    );
+    const oldAdminLinks = (
+      <ul className="nav navbar-nav navbar-right">
         <li><Link to="/signup">Зарегистрировать пользователя <span className="glyphicon glyphicon-plus"></span> </Link></li>
         <li><Link to="/admin">Админка</Link></li>
       </ul>
