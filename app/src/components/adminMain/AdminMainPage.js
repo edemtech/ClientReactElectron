@@ -27,7 +27,6 @@ class AdminMainPage extends React.Component{
 	}
 	getRecords() {
 		if( this.state.firstLoad ) {
-			console.log('first load..');
 			this.props.loadTable().then( res => {
 				this.setState({ tableData: this.props.table.tableData.data, firstLoad: false})
 			});
@@ -42,8 +41,11 @@ class AdminMainPage extends React.Component{
 	deleteRecord(e) {
 		let target = e.currentTarget.getAttribute('data-id');
 		this.props.removeUser(target).then(res => {
-			console.log(target, ' deleted');
-			this.refreshRecords();
+			this.props.addFlashMessage({
+				type: 'success',
+				text: 'Пользователь ' + target + ' удален'
+			})
+			setTimeout( () => this.refreshRecords(), 500);
 		})
 	}
 
