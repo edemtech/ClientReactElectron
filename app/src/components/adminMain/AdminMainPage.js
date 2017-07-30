@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { loadTable, getUser, removeUser } from '../../actions/adminActions';
+import { addFlashMessage } from '../../actions/flashMessages';
 
 
 class AdminMainPage extends React.Component{
@@ -17,6 +18,10 @@ class AdminMainPage extends React.Component{
   }
 	refreshRecords() {
 		this.props.loadTable().then( res => {
+			this.props.addFlashMessage({
+				type: 'success',
+				text: 'Таблица обновлена'
+			})
 			this.setState({ tableData: this.props.table.tableData.data})
 		});
 	}
@@ -104,4 +109,4 @@ AdminMainPage.contextTypes = {
 	router: React.PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { loadTable, getUser, removeUser })(AdminMainPage);
+export default connect(mapStateToProps, { loadTable, getUser, removeUser, addFlashMessage })(AdminMainPage);

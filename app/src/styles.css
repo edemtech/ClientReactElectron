@@ -1,0 +1,7 @@
+.messagesField {
+  position: fixed;
+  bottom: 0px;
+  z-index: 999;
+  width:50%;
+  transition
+}
