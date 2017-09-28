@@ -1,5 +1,5 @@
 {
-    "apiPrefix": "http://localhost:",
+    "apiPrefix": "http://192.168.1.150:",
     "serverPort": "8080",
     "apps":{
         "jasmin": "C:/Program Files (x86)/forWork/JasminCam/jcam.exe",
