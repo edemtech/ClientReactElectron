@@ -7,6 +7,21 @@ import TextFieldGroupB from '../common/TextFieldGroupB';
 
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
+
+function validatePass(data) {
+  let errors = {};
+  if (validator.isEmpty(data.password)) {
+    errors.password = 'Заполните поле';
+  }
+  if (validator.isEmpty(data.passwordConfirmation)) {
+    errors.passwordConfirmation = 'Заполните поле';
+  }
+  if (!validator.equals(data.password, data.passwordConfirmation)) {
+    errors.passwordConfirmation = 'Пароли должны совпадать';
+  }
+  return {errors, isValid: isEmpty(errors)}
+}
+
 function validateInput(data) {
   let errors = {};
 
@@ -18,19 +33,9 @@ function validateInput(data) {
   } else if (!validator.isEmail(data.email)) {
     errors.email = 'Неправильный формат почты';
   }
-  // if (validator.isEmpty(data.password)) {
-  //   errors.password = 'Заполните поле';
-  // }
-  // if (validator.isEmpty(data.passwordConfirmation)) {
-  //   errors.passwordConfirmation = 'Заполните поле';
-  // }
-  // if (!validator.equals(data.password, data.passwordConfirmation)) {
-  //   errors.passwordConfirmation = 'Пароли должны совпадать';
-  // }
   if (validator.isEmpty(data.permission)) {
     errors.permission = 'Заполните поле';
   }
-
   return {errors, isValid: isEmpty(errors)}
 }
 
@@ -39,12 +44,14 @@ class EditUserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      //account settings
       username: this.props.edit.editingUser.username,
       email: this.props.edit.editingUser.email,
-      // password: '',
-      // passwordConfirmation: '',
       permission: this.props.edit.editingUser.permission,
-
+      //password
+      password: '',
+      passwordConfirmation: '',
+      //webcam accounts
       camcon: this.props.edit.editingUser.camcon,
       camconPass: this.props.edit.editingUser.camconPass,
       streamate: this.props.edit.editingUser.streamate,
@@ -59,15 +66,16 @@ class EditUserForm extends React.Component {
       f4fPass: this.props.edit.editingUser.f4fPass,
       jasmin: this.props.edit.editingUser.jasmin,
       jasminPass: this.props.edit.editingUser.jasminPass,
-
+      //other
       errors: {},
       isLoading: false,
-      options: ''
+      options: '',
+      passwordLocked: true
     }
-
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.unlockPassword = this.unlockPassword.bind(this);
   }
 
   //при изменении
@@ -76,7 +84,6 @@ class EditUserForm extends React.Component {
       [e.target.name]: e.target.value
     });
   }
-
   //проверка на правильность и ссылка на функцию валидации
   isValid() {
     const {errors, isValid} = validateInput(this.state);
@@ -85,7 +92,6 @@ class EditUserForm extends React.Component {
     }
     return isValid;
   }
-
   onSave(e) {
     e.preventDefault();
     if (this.isValid()) {
@@ -114,7 +120,6 @@ class EditUserForm extends React.Component {
       });
     }
   }
-
   onDelete(e) {
     e.preventDefault();
     if (this.isValid()) {
@@ -124,23 +129,61 @@ class EditUserForm extends React.Component {
       });
     }
   }
+  unlockPassword(e) {
+    e.preventDefault();
+    this.state.passwordLocked === false
+      ? this.setState({passwordLocked: true})
+      : this.setState({passwordLocked: false});
+  }
+  onSavePassword(e) {
+    e.preventDefault();
+    if (this.isValid()) {
+      let data = {
+        password: this.state.password,
+        passwordConfirmation: this.state.passwordConfirmation
+      };
+      this.props.saveUser(this.props.edit.editingUser.username, data).then(() => {
+        this.props.addFlashMessage({type: 'success', text: 'Пользователь изменен'})
+        this.context.router.push('/admin');
+      });
+    }
+  }
 
   //личико
   render() {
     const {errors} = this.state;
-    const options = map(permissions, (val, key) => <option key={val} value={val}>{key}</option>
+    const options = map(permissions, (val, key) => <option key={val} value={val}>{key}</option>);
+    const passField = (
+      <div>
+        <TextFieldGroup error={errors.password}
+                        label="Пароль"
+                        onChange={this.onChange}
+                        value={this.state.password}
+                        field="password"
+                        type="password"/>
+        <TextFieldGroup error={errors.passwordConfirmation}
+                        label="Подтвердите пароль"
+                        onChange={this.onChange}
+                        value={this.state.passwordConfirmation}
+                        field="passwordConfirmation"
+                        type="password"/>
+        <button onClick={this.onSavePassword} disabled={this.state.isLoading} className="btn btn-primary">
+          Сохранить пароль <span className="glyphicon glyphicon-ok"></span>
+        </button>
+      </div>
     );
-    // console.log(this.props);
+
     return (
       <form onSubmit={this.onSubmit} className="form-group">
-
         <div className="col-md-4">
           <TextFieldGroup error={errors.username} label="Имя пользователя" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.username} field="username"/>
-          <TextFieldGroup error={errors.email} label="Email" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email} field="email"/>
-          {/*
-					<TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="password"/>
-          <TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="password"/>
-					*/}
+          <TextFieldGroup error={errors.email}    label="Email"            onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email}    field="email"/>
+
+          <div className="panel panel-default">
+  					{this.state.passwordLocked
+              ? (<button className="btn btn-warning" onClick={this.unlockPassword}>Изменить пароль <span className="glyphicon glyphicon-lock"></span></button>)
+              : passField}
+          </div>
 
           <div className={classnames("form-group", {'has-error': errors.permission})}>
             <label className="control-label">Права пользователя</label>
@@ -150,18 +193,19 @@ class EditUserForm extends React.Component {
             </select>
             {errors.permission && <span className="help-block">{errors.permission}</span>}
           </div>
+
+
           <div className="form-group btn-group">
             <button onClick={this.onSave} disabled={this.state.isLoading} className="btn btn-success">
-              Изменить запись
-              <span className="glyphicon glyphicon-ok"></span>
+              Изменить запись <span className="glyphicon glyphicon-ok"></span>
             </button>
             <button onClick={this.onDelete} disabled={this.state.isLoading} className="btn btn-danger">
-              Удалить
-              <span className="glyphicon glyphicon-remove"></span>
+              Удалить <span className="glyphicon glyphicon-remove"></span>
             </button>
           </div>
         </div>
 
+        {/*web cam account fields*/}
         <div className={this.state.permission === 'user'
           ? ''
           : 'hidden'}>
