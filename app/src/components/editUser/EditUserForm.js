@@ -8,20 +8,6 @@ import TextFieldGroupB from '../common/TextFieldGroupB';
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
-function validatePass(data) {
-  let errors = {};
-  if (validator.isEmpty(data.password)) {
-    errors.password = 'Заполните поле';
-  }
-  if (validator.isEmpty(data.passwordConfirmation)) {
-    errors.passwordConfirmation = 'Заполните поле';
-  }
-  if (!validator.equals(data.password, data.passwordConfirmation)) {
-    errors.passwordConfirmation = 'Пароли должны совпадать';
-  }
-  return {errors, isValid: isEmpty(errors)}
-}
-
 function validateInput(data) {
   let errors = {};
 
@@ -32,6 +18,15 @@ function validateInput(data) {
     errors.email = 'Заполните поле';
   } else if (!validator.isEmail(data.email)) {
     errors.email = 'Неправильный формат почты';
+  }
+  // if (validator.isEmpty(data.password)) {
+  //   errors.password = 'Заполните поле';
+  // }
+  // if (validator.isEmpty(data.passwordConfirmation)) {
+  //   errors.passwordConfirmation = 'Заполните поле';
+  // }
+  if (!validator.equals(data.password, data.passwordConfirmation)) {
+    errors.passwordConfirmation = 'Пароли должны совпадать';
   }
   if (validator.isEmpty(data.permission)) {
     errors.permission = 'Заполните поле';
@@ -75,6 +70,7 @@ class EditUserForm extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.onSavePassword = this.onSavePassword.bind(this);
     this.unlockPassword = this.unlockPassword.bind(this);
   }
 
@@ -99,6 +95,7 @@ class EditUserForm extends React.Component {
         username: this.state.username,
         email: this.state.email,
         permission: this.state.permission,
+        password: this.state.password,
         camcon: this.state.camcon,
         camconPass: this.state.camconPass,
         streamate: this.state.streamate,
@@ -120,6 +117,23 @@ class EditUserForm extends React.Component {
       });
     }
   }
+  onSavePassword(e) {
+    e.preventDefault();
+    if (this.isValid()) {
+      let data = {
+        password: this.state.password
+      };
+      console.log(data);
+      this.props.saveUser(this.props.edit.editingUser.username, data).then(() => {
+        this.props.addFlashMessage({type: 'success', text: 'Пароль изменен'});
+        this.setState({
+          errors: {},
+          passwordLocked: true
+        });
+        // this.context.router.push('/admin');
+      });
+    }
+  }
   onDelete(e) {
     e.preventDefault();
     if (this.isValid()) {
@@ -135,24 +149,13 @@ class EditUserForm extends React.Component {
       ? this.setState({passwordLocked: true})
       : this.setState({passwordLocked: false});
   }
-  onSavePassword(e) {
-    e.preventDefault();
-    if (this.isValid()) {
-      let data = {
-        password: this.state.password,
-        passwordConfirmation: this.state.passwordConfirmation
-      };
-      this.props.saveUser(this.props.edit.editingUser.username, data).then(() => {
-        this.props.addFlashMessage({type: 'success', text: 'Пользователь изменен'})
-        this.context.router.push('/admin');
-      });
-    }
-  }
+
 
   //личико
   render() {
     const {errors} = this.state;
     const options = map(permissions, (val, key) => <option key={val} value={val}>{key}</option>);
+    // console.log(this.state);
     const passField = (
       <div>
         <TextFieldGroup error={errors.password}
