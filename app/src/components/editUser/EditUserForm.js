@@ -170,9 +170,14 @@ class EditUserForm extends React.Component {
                         value={this.state.passwordConfirmation}
                         field="passwordConfirmation"
                         type="password"/>
-        <button onClick={this.onSavePassword} disabled={this.state.isLoading} className="btn btn-primary">
-          Сохранить пароль <span className="glyphicon glyphicon-ok"></span>
-        </button>
+        <div className="form-group btn-group">
+          <button onClick={this.onSavePassword} disabled={this.state.isLoading} className="btn btn-primary">
+            Сохранить <span className="glyphicon glyphicon-ok"></span>
+          </button>
+          <button onClick={this.unlockPassword} disabled={this.state.isLoading} className="btn btn-danger">
+            Отмена <span className="glyphicon glyphicon-cancel"></span>
+          </button>
+        </div>
       </div>
     );
 
@@ -200,10 +205,10 @@ class EditUserForm extends React.Component {
 
           <div className="form-group btn-group">
             <button onClick={this.onSave} disabled={this.state.isLoading} className="btn btn-success">
-              Изменить запись <span className="glyphicon glyphicon-ok"></span>
+              Изменить запись <span className="glyphicon glyphicon-ok-sign"></span>
             </button>
             <button onClick={this.onDelete} disabled={this.state.isLoading} className="btn btn-danger">
-              Удалить <span className="glyphicon glyphicon-remove"></span>
+              Удалить <span className="glyphicon glyphicon-remove-sign"></span>
             </button>
           </div>
         </div>
