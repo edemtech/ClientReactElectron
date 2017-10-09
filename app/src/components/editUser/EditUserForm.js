@@ -72,6 +72,7 @@ class EditUserForm extends React.Component {
     this.onDelete = this.onDelete.bind(this);
     this.onSavePassword = this.onSavePassword.bind(this);
     this.unlockPassword = this.unlockPassword.bind(this);
+    this.generatePassword = this.generatePassword.bind(this);
   }
 
   //при изменении
@@ -149,6 +150,19 @@ class EditUserForm extends React.Component {
       ? this.setState({passwordLocked: true})
       : this.setState({passwordLocked: false});
   }
+  generatePassword(e) {
+    e.preventDefault();
+    let length = 8,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal;
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    this.setState({
+      password: retVal,
+      passwordConfirmation: retVal
+    });
+  }
 
 
   //личико
@@ -163,16 +177,19 @@ class EditUserForm extends React.Component {
                         onChange={this.onChange}
                         value={this.state.password}
                         field="password"
-                        type="password"/>
+                        type="text"/>
         <TextFieldGroup error={errors.passwordConfirmation}
                         label="Подтвердите пароль"
                         onChange={this.onChange}
                         value={this.state.passwordConfirmation}
                         field="passwordConfirmation"
-                        type="password"/>
+                        type="text"/>
         <div className="form-group btn-group">
           <button onClick={this.onSavePassword} disabled={this.state.isLoading} className="btn btn-primary">
             Сохранить <span className="glyphicon glyphicon-ok"></span>
+          </button>
+          <button onClick={this.generatePassword} disabled={this.state.isLoading} className="btn btn-warning">
+            Cгенерировать пароль
           </button>
           <button onClick={this.unlockPassword} disabled={this.state.isLoading} className="btn btn-danger">
             Отмена <span className="glyphicon glyphicon-cancel"></span>
