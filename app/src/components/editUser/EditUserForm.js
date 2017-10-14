@@ -8,32 +8,6 @@ import TextFieldGroupB from '../common/TextFieldGroupB';
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
-function validateInput(data) {
-  let errors = {};
-
-  if (validator.isEmpty(data.username)) {
-    errors.username = 'Заполните поле';
-  }
-  if (validator.isEmpty(data.email)) {
-    errors.email = 'Заполните поле';
-  } else if (!validator.isEmail(data.email)) {
-    errors.email = 'Неправильный формат почты';
-  }
-  // if (validator.isEmpty(data.password)) {
-  //   errors.password = 'Заполните поле';
-  // }
-  // if (validator.isEmpty(data.passwordConfirmation)) {
-  //   errors.passwordConfirmation = 'Заполните поле';
-  // }
-  if (!validator.equals(data.password, data.passwordConfirmation)) {
-    errors.passwordConfirmation = 'Пароли должны совпадать';
-  }
-  if (validator.isEmpty(data.permission)) {
-    errors.permission = 'Заполните поле';
-  }
-  return {errors, isValid: isEmpty(errors)}
-}
-
 class EditUserForm extends React.Component {
   //конкструктор свойств
   constructor(props) {
@@ -46,6 +20,7 @@ class EditUserForm extends React.Component {
       //password
       password: '',
       passwordConfirmation: '',
+      passwordLocked: true,
       //webcam accounts
       camcon: this.props.edit.editingUser.camcon,
       camconPass: this.props.edit.editingUser.camconPass,
@@ -64,8 +39,7 @@ class EditUserForm extends React.Component {
       //other
       errors: {},
       isLoading: false,
-      options: '',
-      passwordLocked: true
+      options: ''
     }
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -74,21 +48,45 @@ class EditUserForm extends React.Component {
     this.unlockPassword = this.unlockPassword.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
   }
+  //проверка на правильность и ссылка на функцию валидации
+  isValid() {
+    const {errors, isValid} = this.validateInput(this.state);
+    if (!isValid) {
+      this.setState({errors});
+    }
+    return isValid;
+  }
+  validateInput(data) {
+    let errors = {};
 
+    if (validator.isEmpty(data.username)) {
+      errors.username = 'Заполните поле';
+    }
+    if (validator.isEmpty(data.email)) {
+      errors.email = 'Заполните поле';
+    } else if (!validator.isEmail(data.email)) {
+      errors.email = 'Неправильный формат почты';
+    }
+    if (!this.state.passwordLocked) {
+      if (validator.isEmpty(data.password)) {
+        errors.password = 'Заполните поле';
+      }
+      if (!validator.equals(data.password, data.passwordConfirmation)) {
+        errors.passwordConfirmation = 'Пароли должны совпадать';
+      }
+    }
+    if (validator.isEmpty(data.permission)) {
+      errors.permission = 'Заполните поле';
+    }
+    return {errors, isValid: isEmpty(errors)}
+  }
   //при изменении
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value
     });
   }
-  //проверка на правильность и ссылка на функцию валидации
-  isValid() {
-    const {errors, isValid} = validateInput(this.state);
-    if (!isValid) {
-      this.setState({errors});
-    }
-    return isValid;
-  }
+
   onSave(e) {
     e.preventDefault();
     if (this.isValid()) {
@@ -127,11 +125,7 @@ class EditUserForm extends React.Component {
       console.log(data);
       this.props.saveUser(this.props.edit.editingUser.username, data).then(() => {
         this.props.addFlashMessage({type: 'success', text: 'Пароль изменен'});
-        this.setState({
-          errors: {},
-          passwordLocked: true
-        });
-        // this.context.router.push('/admin');
+        this.setState({errors: {}, passwordLocked: true});
       });
     }
   }
@@ -153,46 +147,35 @@ class EditUserForm extends React.Component {
   generatePassword(e) {
     e.preventDefault();
     let length = 8,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal;
+      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      retVal = '';
     for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
+      retVal += charset.charAt(Math.floor(Math.random() * n));
     }
-    this.setState({
-      password: retVal,
-      passwordConfirmation: retVal
-    });
+    this.setState({password: retVal, passwordConfirmation: retVal});
   }
-
 
   //личико
   render() {
     const {errors} = this.state;
-    const options = map(permissions, (val, key) => <option key={val} value={val}>{key}</option>);
+    const options = map(permissions, (val, key) => <option key={val} value={val}>{key}</option>
+    );
     // console.log(this.state);
     const passField = (
       <div>
-        <TextFieldGroup error={errors.password}
-                        label="Пароль"
-                        onChange={this.onChange}
-                        value={this.state.password}
-                        field="password"
-                        type="text"/>
-        <TextFieldGroup error={errors.passwordConfirmation}
-                        label="Подтвердите пароль"
-                        onChange={this.onChange}
-                        value={this.state.passwordConfirmation}
-                        field="passwordConfirmation"
-                        type="text"/>
+        <TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="text"/>
+        <TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="text"/>
         <div className="form-group btn-group">
           <button onClick={this.onSavePassword} disabled={this.state.isLoading} className="btn btn-primary">
-            Сохранить <span className="glyphicon glyphicon-ok"></span>
+            Сохранить
+            <span className="glyphicon glyphicon-ok"></span>
           </button>
           <button onClick={this.generatePassword} disabled={this.state.isLoading} className="btn btn-warning">
             Cгенерировать пароль
           </button>
           <button onClick={this.unlockPassword} disabled={this.state.isLoading} className="btn btn-danger">
-            Отмена <span className="glyphicon glyphicon-cancel"></span>
+            Отмена
+            <span className="glyphicon glyphicon-cancel"></span>
           </button>
         </div>
       </div>
@@ -202,11 +185,15 @@ class EditUserForm extends React.Component {
       <form onSubmit={this.onSubmit} className="form-group">
         <div className="col-md-4">
           <TextFieldGroup error={errors.username} label="Имя пользователя" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.username} field="username"/>
-          <TextFieldGroup error={errors.email}    label="Email"            onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email}    field="email"/>
+          <TextFieldGroup error={errors.email} label="Email" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email} field="email"/>
 
           <div className="panel panel-default">
-  					{this.state.passwordLocked
-              ? (<button className="btn btn-warning" onClick={this.unlockPassword}>Изменить пароль <span className="glyphicon glyphicon-lock"></span></button>)
+            {this.state.passwordLocked
+              ? (
+                <button className="btn btn-warning" onClick={this.unlockPassword}>Изменить пароль
+                  <span className="glyphicon glyphicon-lock"></span>
+                </button>
+              )
               : passField}
           </div>
 
@@ -219,13 +206,14 @@ class EditUserForm extends React.Component {
             {errors.permission && <span className="help-block">{errors.permission}</span>}
           </div>
 
-
           <div className="form-group btn-group">
             <button onClick={this.onSave} disabled={this.state.isLoading} className="btn btn-success">
-              Изменить запись <span className="glyphicon glyphicon-ok-sign"></span>
+              Изменить запись
+              <span className="glyphicon glyphicon-ok-sign"></span>
             </button>
             <button onClick={this.onDelete} disabled={this.state.isLoading} className="btn btn-danger">
-              Удалить <span className="glyphicon glyphicon-remove-sign"></span>
+              Удалить
+              <span className="glyphicon glyphicon-remove-sign"></span>
             </button>
           </div>
         </div>

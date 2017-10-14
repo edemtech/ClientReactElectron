@@ -4,41 +4,8 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import TextFieldGroup from '../common/TextFieldGroup';
 import TextFieldGroupB from '../common/TextFieldGroupB';
-
-
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
-function validateInput(data) {
-	let errors = {};
-
-	if (validator.isEmpty(data.username)) {
-		errors.username = 'Заполните поле';
-	}
-	if (validator.isEmpty(data.email)) {
-		errors.email = 'Заполните поле';
-	} else if (!validator.isEmail(data.email)){
-		errors.email = 'Неправильный формат почты';
-	}
-	if (validator.isEmpty(data.password)) {
-		errors.password = 'Заполните поле';
-	}
-	if (validator.isEmpty(data.passwordConfirmation)) {
-		errors.passwordConfirmation = 'Заполните поле';
-	}
-	if (!validator.equals(data.password, data.passwordConfirmation)){
-		errors.passwordConfirmation = 'Пароли должны совпадать';
-	}
-	if (validator.isEmpty(data.permission)) {
-		errors.permission = 'Заполните поле';
-	}
-
-	return {
-		errors,
-		isValid: isEmpty(errors)
-	}
-}
-
-
 
 class SignupForm extends React.Component{
 	//конкструктор свойств
@@ -73,6 +40,7 @@ class SignupForm extends React.Component{
 
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
+		this.generatePassword = this.generatePassword.bind(this);
 	}
 	//при изменении
 	onChange(e){
@@ -81,7 +49,7 @@ class SignupForm extends React.Component{
 
 	//проверка на правильность и ссылка на функцию валидации
 	isValid() {
-		const { errors, isValid } = validateInput(this.state);
+		const { errors, isValid } = this.validateInput(this.state);
 
 		if (!isValid){
 			this.setState({ errors });
@@ -89,7 +57,34 @@ class SignupForm extends React.Component{
 
 		return isValid;
 	}
+	validateInput(data) {
+		let errors = {};
 
+		if (validator.isEmpty(data.username)) {
+			errors.username = 'Заполните поле';
+		}
+		if (validator.isEmpty(data.email)) {
+			errors.email = 'Заполните поле';
+		} else if (!validator.isEmail(data.email)){
+			errors.email = 'Неправильный формат почты';
+		}
+		if (validator.isEmpty(data.password)) {
+			errors.password = 'Заполните поле';
+		}
+		if (validator.isEmpty(data.passwordConfirmation)) {
+			errors.passwordConfirmation = 'Заполните поле';
+		}
+		if (!validator.equals(data.password, data.passwordConfirmation)){
+			errors.passwordConfirmation = 'Пароли должны совпадать';
+		}
+		if (validator.isEmpty(data.permission)) {
+			errors.permission = 'Заполните поле';
+		}
+		return {
+			errors,
+			isValid: isEmpty(errors)
+		}
+	}
 	//при нажатии кнопки submit
 	onSubmit(e) {
 		e.preventDefault();
@@ -109,6 +104,19 @@ class SignupForm extends React.Component{
 
 		}
 	}
+	generatePassword(e) {
+    e.preventDefault();
+    let length = 8,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = '';
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    this.setState({
+      password: retVal,
+      passwordConfirmation: retVal
+    });
+  }
 
 	//личико
 	render(){
@@ -123,8 +131,8 @@ class SignupForm extends React.Component{
 					<div className="col-md-4">
 						<TextFieldGroup error={errors.username} label="Имя пользователя" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.username} field="username"/>
 				    	<TextFieldGroup error={errors.email} label="Email" onChange={this.onChange} checkUserExists={this.checkUserExists} value={this.state.email} field="email"/>
-				    	<TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="password"/>
-				    	<TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="password"/>
+				    	<TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="text"/>
+				    	<TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="text"/>
 
 			      		<div className={classnames("form-group", { 'has-error': errors.permission })}>
 							<label className="control-label">Права пользователя</label>
@@ -138,9 +146,12 @@ class SignupForm extends React.Component{
 							</select>
 							{errors.permission && <span className="help-block">{errors.permission}</span>}
 						</div>
-						<div className="form-group">
-							<button disabled={this.state.isLoading} className="btn btn-warning">
+						<div className="form-group btn-group">
+							<button disabled={this.state.isLoading} className="btn btn-success">
 								Создать запись
+							</button>
+							<button onClick={this.generatePassword} disabled={this.state.isLoading} className="btn btn-warning">
+								Сгенерировать пароль <span className="glyphicon glyphicon-lock"></span>
 							</button>
 						</div>
 					</div>
