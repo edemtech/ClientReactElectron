@@ -12,6 +12,7 @@ import jwtDecode from 'jwt-decode';
 import { setCurrentUser } from './actions/authActions';
 import routes from './routes';
 
+
 const store = configureStore();
 const routerHistory = syncHistoryWithStore(hashHistory, store);
 
