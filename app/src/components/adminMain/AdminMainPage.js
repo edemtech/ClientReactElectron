@@ -56,7 +56,7 @@ class AdminMainPage extends React.Component{
 				<BootstrapTable
 					data={table}
 					search={true}
-					searchPlaceholder='Поиск'
+					searchPlaceholder="Поиск"
 					multiColumnSearch={true}
 					options={this.options}
 					pagination
@@ -64,9 +64,10 @@ class AdminMainPage extends React.Component{
 					striped
 					hover
 					bordered={false}>
-						<TableHeaderColumn isKey dataField="id" dataSort width='50'>ID</TableHeaderColumn>
-						<TableHeaderColumn dataField="username" dataSort width='150'>Username</TableHeaderColumn>
+						<TableHeaderColumn isKey dataField="id" dataSort width="50">ID</TableHeaderColumn>
+						<TableHeaderColumn dataField="username" dataSort width="150">Username</TableHeaderColumn>
 						<TableHeaderColumn dataField="email" dataSort>Email</TableHeaderColumn>
+						<TableHeaderColumn dataField="permission" dataSort>Permission</TableHeaderColumn>
 						<TableHeaderColumn dataField="id" dataFormat={this.actions}>Action</TableHeaderColumn>
 				</BootstrapTable>
 			</div>

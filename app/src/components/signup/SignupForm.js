@@ -134,82 +134,39 @@ class SignupForm extends React.Component{
 				    	<TextFieldGroup error={errors.password} label="Пароль" onChange={this.onChange} value={this.state.password} field="password" type="text"/>
 				    	<TextFieldGroup error={errors.passwordConfirmation} label="Подтвердите пароль" onChange={this.onChange} value={this.state.passwordConfirmation} field="passwordConfirmation" type="text"/>
 
-			      		<div className={classnames("form-group", { 'has-error': errors.permission })}>
-							<label className="control-label">Права пользователя</label>
-							<select
-								className="form-control"
-								name="permission"
-								onChange={this.onChange}
-								value={this.state.permission}>
-								<option value="" disabled>Выберите права</option>
-								{options}
-							</select>
-							{errors.permission && <span className="help-block">{errors.permission}</span>}
-						</div>
-						<div className="form-group btn-group">
-							<button disabled={this.state.isLoading} className="btn btn-success">
-								Создать запись
-							</button>
-							<button onClick={this.generatePassword} disabled={this.state.isLoading} className="btn btn-warning">
-								Сгенерировать пароль <span className="glyphicon glyphicon-lock"></span>
-							</button>
-						</div>
+			      	<div className={classnames("form-group", { 'has-error': errors.permission })}>
+								<label className="control-label">Права пользователя</label>
+								<select
+									className="form-control"
+									name="permission"
+									onChange={this.onChange}
+									value={this.state.permission}>
+									<option value="" disabled>Выберите права</option>
+									{options}
+								</select>
+								{errors.permission && <span className="help-block">{errors.permission}</span>}
+							</div>
+							<div className="form-group btn-group">
+								<button disabled={this.state.isLoading} className="btn btn-success">
+									Создать запись
+								</button>
+								<button onClick={this.generatePassword} disabled={this.state.isLoading} className="btn btn-warning">
+									Сгенерировать пароль <span className="glyphicon glyphicon-lock"></span>
+								</button>
+							</div>
 					</div>
 
-					<div className={this.state.permission==='user' ? '' : 'hidden'}>
+					<div className={this.state.permission!=='user' && 'hidden'}>
 						<div className="col-md-4">
-							<div className="panel panel-default">
-								<div className="panel-heading">Cam contacts</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="Cam contacts login" onChange={this.onChange} value={this.state.camcon} field="camcon" type="text" />
-						    	<TextFieldGroupB label="Cam contacts password" onChange={this.onChange} value={this.state.camconPass} field="camconPass" type="password" />
-								</div>
-							</div>
-							<div className="panel panel-default">
-								<div className="panel-heading">Streamate</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="Streamate login" onChange={this.onChange} value={this.state.streamate} field="streamate" type="text" />
-							    <TextFieldGroupB label="Streamate password" onChange={this.onChange} value={this.state.streamatePass} field="streamatePass" type="password" />
-								</div>
-							</div>
-							<div className="panel panel-default">
-								<div className="panel-heading">Streamray</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="Streamray login" onChange={this.onChange} value={this.state.streamray} field="streamray" type="text" />
-							    <TextFieldGroupB label="Streamray password" onChange={this.onChange} value={this.state.streamrayPass} field="streamrayPass" type="password" />
-								</div>
-							</div>
-							<div className="panel panel-default">
-								<div className="panel-heading">imlive</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="Imlive login" onChange={this.onChange} value={this.state.imlive} field="imlive" type="text" />
-							    <TextFieldGroupB label="Imlive password" onChange={this.onChange} value={this.state.imlivePass} field="imlivePass" type="password" />
-								</div>
-							</div>
+							<TextFieldGroupB label="Cam contacts login" onChange={this.onChange} valueLogin={this.state.camcon} valuePass={this.state.camconPass} field="camcon" type="text" />
+							<TextFieldGroupB label="Streamate login" onChange={this.onChange} valueLogin={this.state.streamate} valuePass={this.state.streamatePass} field="streamate" type="text" />
+							<TextFieldGroupB label="Streamray login" onChange={this.onChange} valueLogin={this.state.streamray} valuePass={this.state.streamrayPass} field="streamray" type="text" />
+							<TextFieldGroupB label="Imlive login" onChange={this.onChange} valueLogin={this.state.imlive} valuePass={this.state.imlivePass} field="imlive" type="text" />
 						</div>
-
 						<div className="col-md-4">
-							<div className="panel panel-default">
-								<div className="panel-heading">MFC</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="MFC login" onChange={this.onChange} value={this.state.mfc} field="mfc" type="text" />
-							    <TextFieldGroupB label="MFC password" onChange={this.onChange} value={this.state.mfcPass} field="mfcPass" type="password" />
-								</div>
-							</div>
-							<div className="panel panel-default">
-								<div className="panel-heading">F4F</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="F4F login" onChange={this.onChange} value={this.state.f4f} field="f4f" type="text" />
-							    <TextFieldGroupB label="F4F password" onChange={this.onChange} value={this.state.f4fPass} field="f4fPass" type="password" />
-								</div>
-							</div>
-							<div className="panel panel-default">
-								<div className="panel-heading">Jasmin</div>
-								<div className="panel-body-x">
-									<TextFieldGroupB label="Jasmin login" onChange={this.onChange} value={this.state.jasmin} field="jasmin" type="text" />
-							    <TextFieldGroupB label="Jasmin password" onChange={this.onChange} value={this.state.jasminPass} field="jasminPass" type="password" />
-								</div>
-							</div>
+							<TextFieldGroupB label="MFC login" onChange={this.onChange} valueLogin={this.state.mfc} valuePass={this.state.mfcPass} field="mfc" type="text" />
+							<TextFieldGroupB label="F4F login" onChange={this.onChange} valueLogin={this.state.f4f} valuePass={this.state.f4fPass} field="f4f" type="text" />
+							<TextFieldGroupB label="Jasmin login" onChange={this.onChange} valueLogin={this.state.jasmin} valuePass={this.state.jasminPass} field="jasmin" type="text" />
 						</div>
 					</div>
 

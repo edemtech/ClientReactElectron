@@ -44,11 +44,11 @@ class AdminOptions extends React.Component {
 								onClick={this.modifyRecord}>
 								<span className="glyphicon glyphicon-pencil"></span>
 								</button>
-				<button data-id={this.props.id}
+				{/*<button data-id={this.props.id}
 								className="btn btn-danger"
 								onClick={this.deleteRecord}>
 								<span className="glyphicon glyphicon-remove"></span>
-								</button>
+								</button>*/}
 			</div>
     );
   }
