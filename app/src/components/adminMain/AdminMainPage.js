@@ -30,21 +30,27 @@ class AdminMainPage extends React.Component{
 			this.setState({ tableData: this.props.table.tableData.data})
 		});
 	}
-	getRecords() {
-		if( this.state.firstLoad ) {
-			this.props.loadTable().then( res => {
-				this.setState({ tableData: this.props.table.tableData.data, firstLoad: false})
-			});
-		};
-	}
-	actions(cell, row){
+	// getRecords() {
+	// 	if( this.state.firstLoad ) {
+	// 		this.props.loadTable().then( res => {
+	// 			this.setState({ tableData: this.props.table.tableData.data, firstLoad: false})
+	// 		});
+	// 	};
+	// }
+	actions(cell, row) {
 	  return (
 			<AdminOptions id={row.username} getUser={getUser} removeUser={removeUser}/>
 		);
 	}
+	componentDidMount() {
+		this.props.loadTable()
+		.then( res => {
+			this.setState({ tableData: this.props.table.tableData.data, firstLoad: false})
+		})
+	}
 	render(){
 		let table = this.state.tableData;
-		this.getRecords();
+		// this.getRecords();
 		return(
 			<div>
 				<div className="btn-group">

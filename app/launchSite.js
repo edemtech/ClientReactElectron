@@ -43,9 +43,9 @@ var launchSite = function (site,login,password){
 
 			case 'streamray': //encoder
 				var script = 'var x = new XMLHttpRequest();'+
-							 'x.open( "GET", "https://models.streamray.com/p/login.cgi?site=cams&stream=1&action=login&handle='+login+'&password='+password+'",false );'+
-							 'x.send(null);'+
-							 'location.reload()';
+								'x.open( "GET", "https://models.streamray.com/p/login.cgi?site=cams&stream=1&action=login&handle='+login+'&password='+password+'",false );'+
+								'x.send(null);'+
+								'location.reload()';
 				driver.get('https://models.streamray.com');
 				driver.executeScript(script);
 				driver.get('https://models.streamray.com');
