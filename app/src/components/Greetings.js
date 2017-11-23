@@ -27,13 +27,8 @@ class Greetings extends React.Component{
 	}
 }
 
-// function someProps(state) {
-//   return {
-//     auth: state.auth
-//   };
-// }
 Greetings.contextTypes = {
 	router: React.PropTypes.object.isRequired
 }
 
-export default connect( state => { return { auth: state.auth } }, { logout })(Greetings);
+export default connect( state => { return {auth: state.auth} }, { logout })(Greetings);

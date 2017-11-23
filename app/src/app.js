@@ -24,7 +24,6 @@ if (localStorage.jwtToken) {
 }
 //store subscribe
 // store.subscribe(() => {console.log( 'store update.. ', store.getState()) });
-
 ReactDOM.render(
   <Provider store={store}>
     <Router history={routerHistory} routes={routes} />
