@@ -4,6 +4,10 @@ import { logout } from '../actions/authActions';
 
 
 class Greetings extends React.Component{
+	componentDidMount() {
+		const { isAuthenticated } = this.props.auth;
+		( isAuthenticated !== true ) && this.context.router.push('/login');
+	}
 	render() {
 		const u = this.props.auth.user;
 		const { isAuthenticated } = this.props.auth;
@@ -23,10 +27,13 @@ class Greetings extends React.Component{
 	}
 }
 
-function someProps(state) {
-  return {
-    auth: state.auth
-  };
+// function someProps(state) {
+//   return {
+//     auth: state.auth
+//   };
+// }
+Greetings.contextTypes = {
+	router: React.PropTypes.object.isRequired
 }
 
-export default connect(someProps, { logout })(Greetings);
+export default connect( state => { return { auth: state.auth } }, { logout })(Greetings);

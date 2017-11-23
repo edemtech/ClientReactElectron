@@ -13,7 +13,7 @@ import requireAuth from './utils/requireAuth';
 
 export default (
 	<Route path="/" component={App}>
-		<IndexRoute component={Greetings} />
+		<IndexRoute component={requireAuth(Greetings)} />
 		<Route path="signup" component={requireAuth(SignupPage)} />
 		<Route path="login" component={LoginPage} />
 		<Route path="admin" component={requireAuth(AdminMainPage)} />
